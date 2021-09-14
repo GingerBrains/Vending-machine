@@ -84,7 +84,7 @@ public class Processor {
             return coins;
         }
         else{
-            int[] zero = {0,0,0,0};
+            int[] zero = {-9,-9,-9,-9};
             return zero;
         }
     }
@@ -93,6 +93,14 @@ public class Processor {
         int[] result = new int[4];
         for (int i = 0; i < 4; i++) {
             result[i] = first[i] + second[i];
+        }
+        return result;
+    }
+
+    public int[] subArray(int[] first, int[] second) {
+        int[] result = new int[4];
+        for (int i = 0; i < 4; i++) {
+            result[i] = first[i] - second[i];
         }
         return result;
     }

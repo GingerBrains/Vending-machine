@@ -8,7 +8,7 @@ public class DataStore implements Serializable {
     private int[] candyBank={10,10,10,10};
     private double[] denomination={0.25,0.50,1,5};
     private double[] candyPrice={1,2.5,5,6.5};
-    private String[] candyName={"beans","frogs","bonbons","flies"};
+    private String[] candyName={"bean","frog","bonbon","fly"};
 
 
     public int[] getCoinBank() {
