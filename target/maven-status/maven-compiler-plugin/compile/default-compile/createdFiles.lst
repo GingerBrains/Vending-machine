@@ -1,3 +1,6 @@
+domain/CandyFactory.class
+domain/Candy.class
 bootstrap/Driver.class
 domain/DataStore.class
 domain/Processor.class
+domain/CandyBuilder.class
