@@ -105,6 +105,14 @@ public class Processor {
         return result;
     }
 
+    public void giveAllMoneyBack(double inputMoney){
+        System.out.println("Here is Your money :\n" +
+                breakMoney(inputMoney)[0] + "\t5 dollar notes\n" +
+                breakMoney(inputMoney)[1] + "\t1 dollar notes\n" +
+                breakMoney(inputMoney)[2] + "\t50 cent coins\n" +
+                breakMoney(inputMoney)[3] + "\t25 cent coins\n");
+    }
+
 }
 
 

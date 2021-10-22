@@ -5,10 +5,12 @@ import java.io.Serializable;
 public class DataStore implements Serializable {
 
     private int[] coinBank={50,50,50,50};
-    private int[] candyBank={10,10,10,10};
+    //private int[] candyBank={10,10,10,10};
     private double[] denomination={0.25,0.50,1,5};
-    private double[] candyPrice={1,2.5,5,6.5};
-    private String[] candyName={"bean","frog","bonbon","fly"};
+    //private double[] candyPrice={1,2.5,5,6.5};
+    //private String[] candyName={"bean","frog","bonbon","fly"};
+    public Candy[] candy=new Candy[4];
+
 
 
     public int[] getCoinBank() {
@@ -19,13 +21,13 @@ public class DataStore implements Serializable {
         this.coinBank = coinBank;
     }
 
-    public int[] getCandyBank() {
-        return candyBank;
-    }
+//    public int[] getCandyBank() {
+//        return candyBank;
+//    }
 
-    public void setCandyBank(int[] candyBank) {
-        this.candyBank = candyBank;
-    }
+//    public void setCandyBank(int[] candyBank) {
+//        this.candyBank = candyBank;
+//    }
 
     public double[] getDenomination() {
         return denomination;
@@ -35,19 +37,19 @@ public class DataStore implements Serializable {
         this.denomination = denomination;
     }
 
-    public String[] getCandyName() {
-        return candyName;
-    }
-
-    public void setCandyName(String[] candyName) {
-        this.candyName = candyName;
-    }
-
-    public double[] getCandyPrice() {
-        return candyPrice;
-    }
-
-    public void setCandyPrice(double[] candyPrice) {
-        this.candyPrice = candyPrice;
-    }
+//    public String[] getCandyName() {
+//        return candyName;
+//    }
+//
+//    public void setCandyName(String[] candyName) {
+//        this.candyName = candyName;
+//    }
+//
+//    public double[] getCandyPrice() {
+//        return candyPrice;
+//    }
+//
+//    public void setCandyPrice(double[] candyPrice) {
+//        this.candyPrice = candyPrice;
+//    }
 }

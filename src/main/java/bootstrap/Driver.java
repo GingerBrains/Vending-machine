@@ -4,9 +4,12 @@ import domain.*;
 import java.io.*;
 import java.util.InputMismatchException;
 import java.util.Scanner;
-import org.apache.log4j.*;
-import org.slf4j.*;
+import org.apache.log4j.DailyRollingFileAppender;
+import org.apache.log4j.EnhancedPatternLayout;
+import org.apache.log4j.Level;
+import org.apache.log4j.Priority;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 public class Driver {
@@ -18,6 +21,10 @@ public class Driver {
         DataStore dataStore = new DataStore();
         Processor processor = new Processor();
 
+        dataStore.candy[0] = CandyFactory.getCandy("Bertie Botts Every Flavor Beans");
+        dataStore.candy[1] = CandyFactory.getCandy("Chocolate Frogs");
+        dataStore.candy[2] = CandyFactory.getCandy("Exploding Bon Bons");
+        dataStore.candy[3] = CandyFactory.getCandy("Fudge Flies");
 
         //serialize read
         File g = new File("DataStore.dat");
@@ -25,6 +32,7 @@ public class Driver {
             ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream("DataStore.dat"));
             dataStore = (DataStore) objectInputStream.readObject();
         }
+
 
         while (true) {
             try{
@@ -39,20 +47,23 @@ public class Driver {
 
             System.out.println("Enter your choice number: ");
             int choice = sc.nextInt() - 1;
-            double change = inputMoney - dataStore.getCandyPrice()[choice];
+
+            if(choice==-1){
+                System.exit(0);
+            }
+
+            double change = inputMoney - dataStore.candy[choice].getCost();
             int[] changeToGive = processor.checkChange(change, dataStore.getCoinBank());
-            if (inputMoney >= dataStore.getCandyPrice()[choice]) {
-                if (dataStore.getCandyBank()[choice] != 0) {
+            if (inputMoney >= dataStore.candy[choice].getCost()) {
+                if (dataStore.candy[choice].getQuantity() != 0) {
                     if (changeToGive[0] != -9 && changeToGive[1] != -9 && changeToGive[2] != -9 && changeToGive[3] != -9) {
                         //add money
                         dataStore.setCoinBank(processor.addArray(dataStore.getCoinBank(), processor.breakMoney(inputMoney)));
 
 
                         // remove candy from machine
-                        int[] newCandyBank = dataStore.getCandyBank();
-                        newCandyBank[choice] -= 1;
-                        dataStore.setCandyBank(newCandyBank);
-                        System.out.println("Here is your " + dataStore.getCandyName()[choice]);
+                        dataStore.candy[choice].setQuantity(dataStore.candy[choice].getQuantity()- 1);
+                        System.out.println("Here is your " + dataStore.candy[choice].getName());
 
 
                         //give back change
@@ -65,46 +76,34 @@ public class Driver {
 
 
                         //write logs
-                        logger.info(dataStore.getCandyName()[choice] + " was given");
+                        logger.info(dataStore.candy[choice].getName() + " was given");
 
                     } else {
                         System.out.println("Not enough Change left in Machine to process Transaction ");
-                        System.out.println("Here is Your money :\n" +
-                                processor.breakMoney(inputMoney)[0] + "\t5 dollar notes\n" +
-                                processor.breakMoney(inputMoney)[1] + "\t1 dollar notes\n" +
-                                processor.breakMoney(inputMoney)[2] + "\t50 cent coins\n" +
-                                processor.breakMoney(inputMoney)[3] + "\t25 cent coins\n");
-                        logger.info(dataStore.getCandyName()[choice] + "\tnot given");
+                        processor.giveAllMoneyBack(inputMoney);
+                        logger.info(dataStore.candy[choice].getName() + "\tnot given");
 
                     }
                 } else {
-                    System.out.println(dataStore.getCandyName()[choice] + " is Out of Stock");
-                    System.out.println("Here is Your money :\n" +
-                            processor.breakMoney(inputMoney)[0] + "\t5 dollar notes\n" +
-                            processor.breakMoney(inputMoney)[1] + "\t1 dollar notes\n" +
-                            processor.breakMoney(inputMoney)[2] + "\t50 cent coins\n" +
-                            processor.breakMoney(inputMoney)[3] + "\t25 cent coins\n");
-                    logger.info(dataStore.getCandyName()[choice] + "\tnot given");
+                    System.out.println(dataStore.candy[choice].getName() + " is Out of Stock");
+                    processor.giveAllMoneyBack(inputMoney);
+                    logger.info(dataStore.candy[choice].getName() + "\tnot given");
 
                 }
             } else {
                 System.out.println("Not enough Money Deposited to Buy candy");
-                System.out.println("Here is Your money :\n" +
-                        processor.breakMoney(inputMoney)[0] + "\t5 dollar notes\n" +
-                        processor.breakMoney(inputMoney)[1] + "\t1 dollar notes\n" +
-                        processor.breakMoney(inputMoney)[2] + "\t50 cent coins\n" +
-                        processor.breakMoney(inputMoney)[3] + "\t25 cent coins\n");
-                logger.info(dataStore.getCandyName()[choice] + "\tnot given");
+                processor.giveAllMoneyBack(inputMoney);
+                logger.info(dataStore.candy[choice].getName() + "\tnot given");
 
             }
             //serialize write
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream("DataStore.dat"));
             objectOutputStream.writeObject(dataStore);
             }catch (IOException e) {
-                logger.error("There was an error ");
+                logger.error("There was an error " + e);
                 System.out.println("ERROR");
             }catch (InputMismatchException m){
-                logger.error("There was an error 1");
+                logger.error("There was an error 1" + m);
                 System.out.println("ERROR");
             }
         }
