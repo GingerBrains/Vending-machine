@@ -1,20 +1,89 @@
-# Vending-machine
-The gumball machine is a vending machine that accepts cash and coins. It has 4 types of sweets – each with a fixed price.
+# Candy Vending Machine
 
-Features:
-1. Machine should allow the user to deposit money in cash and coins. For e.g. ( {cash:5.0} – is Rs
-5.00 in a Rs5 note. {coin:5.25} is 1 coin of Rs 5.0 and 1 coin of 25 paise. )
-2. If money is deposited, the machine should allow the user to select one of 4 sweets to purchase.
-3. Once a sweet selection is made,
-  3.1. if the money deposited is the exact price of the sweet → the machine will deliver that sweet and decrement its own inventory of that sweet by 1.
-  3.2. if the money deposited is more than the price of the sweet → the machine will return the remaining change along with the sweet.
-  3.3. If the money deposited is more than the price of the sweet and the machine does not have enough coins to return the exact change, it will void the           
-       transaction and return the full amount back to the user – it will not release the sweet.
-  3.4. If the machine is out of a particular sweet then it will either prevent the user from selecting that sweet or it will return the full amount deposited along        with a message that the machine is out of stock for the sweet selected.
-4. Once the money is returned and the sweet is given out – the transaction is complete.
-5. Machine should keep a log of all the transactions it has completed or cancelled.
-6. Machine will begin with an initial inventory of 10 sweets of each kind and money in coins for change → ( 50 coins each of denomination)
-7. You will create a command-line interface to enter all these options, the menu should repeat itself in a loop once a transaction is complete or cancelled.
-8. You will allow the user to shut down the machine. This will exit the program.
-9. When the machine is shut down – it will save its current state i.e. sweets inventory and coins inventory in a serialized object.
-10. When you restart the machine, the machine will start back up from the saved off state.
+This project simulates a **candy vending machine** that allows users to purchase candies by depositing money. The machine supports four types of candies, each with a fixed price, and handles transactions, change management, and inventory tracking. It also logs all transactions and persists its state (inventory and coin bank) between sessions.
+
+---
+
+## Features
+
+1. **Candy Selection:**
+   - Users can choose from four types of candies:
+     - Bertie Botts Every Flavor Beans ($1.0)
+     - Chocolate Frogs ($2.5)
+     - Exploding Bon Bons ($5.0)
+     - Fudge Flies ($6.5)
+
+2. **Money Handling:**
+   - Accepts money in the form of dollars and cents.
+   - Calculates and returns change if the deposited amount exceeds the candy price.
+   - Voids the transaction and returns the full amount if insufficient change is available.
+
+3. **Inventory Management:**
+   - Tracks the quantity of each candy in stock.
+   - Prevents sales if a candy is out of stock.
+
+4. **Transaction Logging:**
+   - Logs all successful and failed transactions for auditing purposes.
+
+5. **State Persistence:**
+   - Saves the machine's state (candy inventory and coin bank) to a file (`DataStore.dat`) on shutdown.
+   - Restores the state from the file on restart.
+
+6. **Error Handling:**
+   - Handles invalid inputs and logs errors for debugging.
+
+---
+
+## How It Works
+
+1. **User Interaction:**
+   - The user deposits money and selects a candy from the menu.
+   - The machine checks if the candy is in stock and if sufficient change is available.
+   - If both conditions are met, the candy is dispensed, and change is returned.
+   - If not, the transaction is voided, and the money is returned.
+
+2. **Coin Bank:**
+   - The machine maintains a coin bank with denominations:
+     - $5 bills
+     - $1 bills
+     - 50-cent coins
+     - 25-cent coins
+   - The coin bank is updated after every transaction.
+
+3. **Logging:**
+   - All transactions (successful or failed) are logged in `candyLogs.log`.
+
+4. **State Persistence:**
+   - The machine's state is saved to `DataStore.dat` on shutdown and restored on restart.
+
+---
+
+## Code Structure
+
+The project is organized into the following packages and classes:
+
+### **`bootstrap` Package**
+- **`Driver`:** The main class that runs the vending machine. It handles user interaction, transaction processing, and state persistence.
+
+### **`domain` Package**
+- **`Candy`:** Represents a candy with attributes like name, cost, and quantity.
+- **`CandyBuilder`:** A builder class for creating `Candy` objects.
+- **`CandyFactory`:** A factory class that creates predefined `Candy` objects.
+- **`DataStore`:** Stores the machine's state, including the coin bank and candy inventory.
+- **`Processor`:** Handles transaction logic, including money breakdown, change calculation, and inventory updates.
+
+---
+
+## Usage
+
+### Prerequisites
+- Java Development Kit (JDK) 8 or later.
+- Apache Log4j for logging (included in the project).
+
+### Running the Program
+1. Clone the repository or download the source code.
+2. Navigate to the project directory.
+3. Compile and run the program:
+   ```bash
+   javac bootstrap/Driver.java
+   java bootstrap/Driver
